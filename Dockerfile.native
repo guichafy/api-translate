@@ -1,0 +1,15 @@
+FROM debian:bookworm-slim AS runtime
+
+ENV APP_HOME=/app
+WORKDIR ${APP_HOME}
+
+RUN useradd --system --home ${APP_HOME} --shell /usr/sbin/nologin spring
+
+COPY target/translate ${APP_HOME}/translate
+RUN chown spring:spring ${APP_HOME}/translate \
+    && chmod +x ${APP_HOME}/translate
+
+EXPOSE 8080
+USER spring
+
+ENTRYPOINT ["/app/translate"]
