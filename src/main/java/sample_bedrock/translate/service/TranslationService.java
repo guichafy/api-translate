@@ -2,9 +2,11 @@ package sample_bedrock.translate.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,9 @@ public class TranslationService {
     }
 
     public List<String> translateTerms(String originLocale, String destinationLocale, List<String> terms) {
+        long startTime = System.nanoTime();
+        MDC.put("aws.bedrockModel", modelId);
+        MDC.put("aws.region", awsRegion);
         try {
             logger.info("Iniciando tradução de {} termos de {} para {}", terms.size(), originLocale, destinationLocale);
 
@@ -73,17 +78,32 @@ public class TranslationService {
 
             // Executar a tradução
             ConverseResponse response = getBedrockClient().converse(converseRequest);
+            String bedrockRequestId = response.responseMetadata() != null ? response.responseMetadata().requestId() : null;
+            if (bedrockRequestId != null && !bedrockRequestId.isBlank()) {
+                MDC.put("aws.bedrockRequestId", bedrockRequestId);
+            }
 
             // Extrair e processar a resposta
             String translatedContent = extractTranslatedContent(response);
             List<String> translatedTerms = parseTranslatedTerms(translatedContent, terms.size());
 
+            long durationMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
+            MDC.put("durationMs", String.valueOf(durationMs));
+
             logger.info("Tradução concluída com sucesso para {} termos", translatedTerms.size());
             return translatedTerms;
 
         } catch (Exception e) {
+            long durationMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
+            MDC.put("durationMs", String.valueOf(durationMs));
+
             logger.error("Erro durante a tradução: {}", e.getMessage(), e);
             throw new RuntimeException("Falha na tradução: " + e.getMessage(), e);
+        } finally {
+            MDC.remove("durationMs");
+            MDC.remove("aws.bedrockRequestId");
+            MDC.remove("aws.region");
+            MDC.remove("aws.bedrockModel");
         }
     }
 

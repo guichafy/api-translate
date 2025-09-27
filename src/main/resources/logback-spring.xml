@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="sample-bedrock-translate" />
+    <springProperty scope="context" name="ENVIRONMENT" source="spring.profiles.active" defaultValue="default" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <fieldName>timestamp</fieldName>
+                    <pattern>yyyy-MM-dd'T'HH:mm:ss.SSS'Z'</pattern>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <logLevel>
+                    <fieldName>level</fieldName>
+                </logLevel>
+                <loggerName>
+                    <fieldName>logger</fieldName>
+                </loggerName>
+                <threadName>
+                    <fieldName>thread</fieldName>
+                </threadName>
+                <message>
+                    <fieldName>message</fieldName>
+                </message>
+                <arguments>
+                    <fieldName>arguments</fieldName>
+                    <includeNonStructuredArguments>true</includeNonStructuredArguments>
+                </arguments>
+                <pattern>
+                    <pattern>{"application":"${APP_NAME}","environment":"${ENVIRONMENT}"}</pattern>
+                </pattern>
+                <mdcField fieldName="traceId" mdcKey="traceId" />
+                <mdcField fieldName="spanId" mdcKey="spanId" />
+                <mdcField fieldName="requestId" mdcKey="requestId" />
+                <provider class="sample_bedrock.translate.config.logging.HttpMdcJsonProvider">
+                    <fieldName>http</fieldName>
+                </provider>
+                <provider class="sample_bedrock.translate.config.logging.AwsMdcJsonProvider">
+                    <fieldName>aws</fieldName>
+                </provider>
+                <mdcField fieldName="durationMs" mdcKey="durationMs" />
+                <mdc>
+                    <fieldName>context</fieldName>
+                </mdc>
+                <callerData>
+                    <fieldName>caller</fieldName>
+                    <classFieldName>class</classFieldName>
+                    <methodFieldName>method</methodFieldName>
+                    <fileFieldName>file</fileFieldName>
+                    <lineFieldName>line</lineFieldName>
+                </callerData>
+                <stackTrace>
+                    <fieldName>exception</fieldName>
+                    <classFieldName>type</classFieldName>
+                    <messageFieldName>message</messageFieldName>
+                    <stackTraceFieldName>stacktrace</stackTraceFieldName>
+                    <includeStackTrace>true</includeStackTrace>
+                    <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                        <maxDepthPerThrowable>50</maxDepthPerThrowable>
+                        <rootCauseFirst>true</rootCauseFirst>
+                    </throwableConverter>
+                </stackTrace>
+            </providers>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>
