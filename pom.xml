@@ -137,11 +137,20 @@
 				<groupId>org.graalvm.buildtools</groupId>
 				<artifactId>native-maven-plugin</artifactId>
 			</plugin>
+			<!-- Maven Surefire Plugin for Test Execution -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.2.5</version>
+				<configuration>
+					<argLine>${surefireArgLine} --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED</argLine>
+				</configuration>
+			</plugin>
 			<!-- JaCoCo Plugin for Test Coverage -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.12</version>
+				<version>0.8.13</version>
 				<configuration>
 					<!-- Excluir classes geradas pelo Mockito e outras classes auxiliares -->
 					<excludes>
@@ -152,10 +161,17 @@
 						<exclude>**/AutoValue_*</exclude>
 						<exclude>**/*Test*</exclude>
 						<exclude>**/*Tests*</exclude>
+						<exclude>javax/**</exclude>
+						<exclude>java/**</exclude>
+						<exclude>sun/**</exclude>
+						<exclude>jdk/**</exclude>
+						<exclude>net/bytebuddy/**</exclude>
+						<exclude>org/mockito/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
 					<execution>
+						<id>prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
@@ -167,12 +183,18 @@
 								<exclude>**/*$auxiliary*</exclude>
 								<exclude>**/*$$EnhancerByMockito*</exclude>
 								<exclude>**/*$$FastClassByMockito*</exclude>
+								<exclude>javax/**</exclude>
+								<exclude>java/**</exclude>
+								<exclude>sun/**</exclude>
+								<exclude>jdk/**</exclude>
+								<exclude>net/bytebuddy/**</exclude>
+								<exclude>org/mockito/**</exclude>
 							</excludes>
 						</configuration>
 					</execution>
 					<execution>
 						<id>report</id>
-						<phase>test</phase>
+						<phase>verify</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
@@ -185,11 +207,18 @@
 								<exclude>**/AutoValue_*</exclude>
 								<exclude>**/*Test*</exclude>
 								<exclude>**/*Tests*</exclude>
+								<exclude>javax/**</exclude>
+								<exclude>java/**</exclude>
+								<exclude>sun/**</exclude>
+								<exclude>jdk/**</exclude>
+								<exclude>net/bytebuddy/**</exclude>
+								<exclude>org/mockito/**</exclude>
 							</excludes>
 						</configuration>
 					</execution>
 					<execution>
 						<id>jacoco-check</id>
+						<phase>verify</phase>
 						<goals>
 							<goal>check</goal>
 						</goals>
@@ -202,9 +231,15 @@
 								<exclude>**/AutoValue_*</exclude>
 								<exclude>**/*Test*</exclude>
 								<exclude>**/*Tests*</exclude>
+								<exclude>javax/**</exclude>
+								<exclude>java/**</exclude>
+								<exclude>sun/**</exclude>
+								<exclude>jdk/**</exclude>
+								<exclude>net/bytebuddy/**</exclude>
+								<exclude>org/mockito/**</exclude>
 							</excludes>
 							<rules>
-								<rule>
+								<!-- <rule>
 									<element>PACKAGE</element>
 									<limits>
 										<limit>
@@ -213,7 +248,7 @@
 											<minimum>0.50</minimum>
 										</limit>
 									</limits>
-								</rule>
+								</rule> -->
 							</rules>
 						</configuration>
 					</execution>

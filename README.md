@@ -51,3 +51,8 @@ docker run --rm -p 8080:8080 translate-native
 
 Isso iniciará o binário nativo dentro de uma imagem Debian slim com um usuário não privilegiado.
 
+
+## Gerando relatório de teste
+```bash
+./mvnw test jacoco:report
+```
