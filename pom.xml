@@ -239,7 +239,7 @@
 								<exclude>org/mockito/**</exclude>
 							</excludes>
 							<rules>
-								<!-- <rule>
+								<rule>
 									<element>PACKAGE</element>
 									<limits>
 										<limit>
@@ -248,7 +248,7 @@
 											<minimum>0.50</minimum>
 										</limit>
 									</limits>
-								</rule> -->
+								</rule>
 							</rules>
 						</configuration>
 					</execution>
