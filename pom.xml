@@ -142,11 +142,33 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.12</version>
+				<configuration>
+					<!-- Excluir classes geradas pelo Mockito e outras classes auxiliares -->
+					<excludes>
+						<exclude>**/*$MockitoMock*</exclude>
+						<exclude>**/*$auxiliary*</exclude>
+						<exclude>**/*$$EnhancerByMockito*</exclude>
+						<exclude>**/*$$FastClassByMockito*</exclude>
+						<exclude>**/AutoValue_*</exclude>
+						<exclude>**/*Test*</exclude>
+						<exclude>**/*Tests*</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
+						<configuration>
+							<!-- Configurações específicas do agente -->
+							<propertyName>surefireArgLine</propertyName>
+							<excludes>
+								<exclude>**/*$MockitoMock*</exclude>
+								<exclude>**/*$auxiliary*</exclude>
+								<exclude>**/*$$EnhancerByMockito*</exclude>
+								<exclude>**/*$$FastClassByMockito*</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 					<execution>
 						<id>report</id>
@@ -154,6 +176,17 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
+						<configuration>
+							<excludes>
+								<exclude>**/*$MockitoMock*</exclude>
+								<exclude>**/*$auxiliary*</exclude>
+								<exclude>**/*$$EnhancerByMockito*</exclude>
+								<exclude>**/*$$FastClassByMockito*</exclude>
+								<exclude>**/AutoValue_*</exclude>
+								<exclude>**/*Test*</exclude>
+								<exclude>**/*Tests*</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 					<execution>
 						<id>jacoco-check</id>
@@ -161,6 +194,15 @@
 							<goal>check</goal>
 						</goals>
 						<configuration>
+							<excludes>
+								<exclude>**/*$MockitoMock*</exclude>
+								<exclude>**/*$auxiliary*</exclude>
+								<exclude>**/*$$EnhancerByMockito*</exclude>
+								<exclude>**/*$$FastClassByMockito*</exclude>
+								<exclude>**/AutoValue_*</exclude>
+								<exclude>**/*Test*</exclude>
+								<exclude>**/*Tests*</exclude>
+							</excludes>
 							<rules>
 								<rule>
 									<element>PACKAGE</element>
