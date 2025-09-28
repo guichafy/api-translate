@@ -1,7 +1,8 @@
 # API Translate
 
-REST API construída com Spring Boot 3 que integra com o AWS Bedrock Runtime para realizar traduções. Este documento explica co
-mo gerar uma build nativa com GraalVM e como empacotar o binário em uma imagem Docker minimalista.
+![Banner do Projeto](docs/banner.png)
+
+REST API construída com Spring Boot 3 que integra com o AWS Bedrock Runtime para realizar traduções. Este documento explica como gerar uma build nativa com GraalVM e como empacotar o binário em uma imagem Docker minimalista.
 
 ## Pré-requisitos
 
