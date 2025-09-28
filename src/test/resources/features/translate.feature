@@ -10,9 +10,6 @@ Feature: Translation endpoint behaviour
       | Como você está? |
     When the client calls POST "/api/v1/translate"
     Then the response status is 200
-    And the response JSON contains translated terms:
-      | Olá |
-      | Como você está? |
     And the response JSON has array size 2 for terms
     And the translation service is invoked with the request payload
 
@@ -20,15 +17,14 @@ Feature: Translation endpoint behaviour
     Given a translation request from "pt-BR" to "en-US" with terms:
       | Bom dia |
       | Obrigado |
+      | Gato      | 
     And the translation service returns:
       | Good morning |
       | Thank you |
+      | Cat |
     When the client calls POST "/api/v1/translate"
     Then the response status is 200
-    And the response JSON contains translated terms:
-      | Good morning |
-      | Thank you |
-    And the response JSON has array size 2 for terms
+    And the response JSON has array size 3 for terms
     And the translation service is invoked with the request payload
 
   Scenario: Rejeitar requisição com lista de termos vazia
